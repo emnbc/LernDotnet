@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace LernDotnet.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/weather")]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries =
