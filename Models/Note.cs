@@ -1,6 +1,6 @@
 namespace LernDotnet.Models;
  
-public sealed class Note
+public sealed class Note : IHasTimestamps
 {
     public int Id { get; set; }
  

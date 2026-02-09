@@ -14,26 +14,7 @@ public sealed class AppDbContext : DbContext
  
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Note>(entity =>
-        {
-            entity.HasKey(x => x.Id);
- 
-            entity.Property(x => x.Title)
-                .IsRequired()
-                .HasMaxLength(200);
- 
-            entity.Property(x => x.Content)
-                .IsRequired();
- 
-            entity.Property(x => x.CreatedAt)
-                .IsRequired()
-                .HasDefaultValueSql("now()");
- 
-            entity.Property(x => x.UpdatedAt)
-                .IsRequired()
-                .HasDefaultValueSql("now()");
-        });
- 
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
         base.OnModelCreating(modelBuilder);
     }
  
@@ -53,16 +34,19 @@ public sealed class AppDbContext : DbContext
     {
         var now = DateTimeOffset.UtcNow;
  
-        foreach (var entry in ChangeTracker.Entries<Note>())
+        foreach (var entry in ChangeTracker.Entries())
         {
+            if (entry.Entity is not LernDotnet.Models.IHasTimestamps entity)
+                continue;
+                
             if (entry.State == EntityState.Added)
             {
-                entry.Entity.CreatedAt = now;
-                entry.Entity.UpdatedAt = now;
+                entity.CreatedAt = now;
+                entity.UpdatedAt = now;
             }
             else if (entry.State == EntityState.Modified)
             {
-                entry.Entity.UpdatedAt = now;
+                entity.UpdatedAt = now;
             }
         }
     }
