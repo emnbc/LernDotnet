@@ -11,6 +11,7 @@ public sealed class AppDbContext : DbContext
     }
  
     public DbSet<Note> Notes => Set<Note>();
+    public DbSet<AppUser> Users => Set<AppUser>();
  
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
